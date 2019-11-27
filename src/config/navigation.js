@@ -28,7 +28,6 @@ const defaultNavOptions = ({navigation}) => ({
   // },
   // headerTintColor: transparent,
 
-  headerBackImage: BackButtonImage,
   headerTitle: function customHeader(props) {
     return <CustomText h2 {...props} />;
   },
