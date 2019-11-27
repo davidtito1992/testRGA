@@ -97,6 +97,8 @@ Use the the command in the rootpath to generate the APK:
 ```
 yarn run android:build
 ```
+#### Fix react-native-torch: https://github.com/ludo/react-native-torch/commit/5d412d0c4d52c7ecfd5260c28c100a2d6da50f47#diff-7ae5a9093507568eabbf35c3b0665732
+
 It will generate the apk file in the path `android/app/build/outputs/apk/app-release.apk`
 
 If you want to test that file in a plugged devise use the command `yarn run android:install` to install it.
