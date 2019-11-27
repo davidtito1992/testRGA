@@ -1,50 +1,59 @@
 import React, {useState} from 'react';
-import {View, SafeAreaView, Switch, FlatList, Image} from 'react-native';
+import {View, SafeAreaView, Switch, FlatList, Image, PermissionsAndroid} from 'react-native';
 import CustomButton from '@components/CustomButton';
 import styles from './styles';
 import CustomText from '@app/components/CustomText';
+import moment from "moment";
+import Config from 'react-native-config';
+import Geolocation from 'react-native-geolocation-service';
+
+const GEOLOCATION_OPTIONS = {
+  enableHighAccuracy: true,
+  timeout: 30000,
+  maximumAge: 10000
+};
 
 export default Home = props => {
-  const [IsSwitchOn, setIsSwitchOn] = useState(false);
-  const FlatListItems= [
-    {key: 'One'},
-    {key: 'Two'},
-    {key: 'Three'},
-    {key: 'Four'},
-    {key: 'Five'}
-  ];
-  const FlatListItemSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          marginHorizontal:20,
-          width: "90%",
-          backgroundColor: "#607D8B",
-        }}
-      />
-    );
-}
+  const [isSwitchOn, setIsSwitchOn] = useState(false);
+  const FlatListItemSeparator = () => <View style={styles.separator}/>;
+
+  
+  const requestLocation = async isSwitchOn => {
+    if(isSwitchOn){
+      try {
+        const granted = await PermissionsAndroid.request(PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION);
+        if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+          Geolocation.getCurrentPosition(position => props.getWeather({lat: position?.coords?.latitude , long:position?.coords?.longitude}),
+            error => console.log(error.code, error.message),
+            GEOLOCATION_OPTIONS
+          );
+          setIsSwitchOn(isSwitchOn);
+        } else setIsSwitchOn(!isSwitchOn);
+      } catch (err) {
+        console.warn(err);
+      }
+    } else setIsSwitchOn(isSwitchOn);
+  }
+
   return (
       <SafeAreaView style={styles.container}>
         <View style={styles.header}>
-          <CustomText>
-            FORECAST
-          </CustomText>
+          <CustomText>FORECAST</CustomText>
           <Switch
-          value={IsSwitchOn}
-          onValueChange={() =>{ setIsSwitchOn( isSwitchOn =>  !isSwitchOn)}}
+          value={isSwitchOn}
+          onValueChange={requestLocation}
           />
         </View>
         <View style={styles.list}>
           <FlatList
-          data={ FlatListItems }
+          data={props.weatherList}
           ItemSeparatorComponent={FlatListItemSeparator}
+          keyExtractor={item => item.applicable_date}
           renderItem={({item}) =>
-          <View style={{width:300,flexDirection:'row', marginBottom:30}}>
-          <CustomText> {item.key} </CustomText>
-          <CustomText> prueba 1 </CustomText>
-          <Image source={{uri:'https://facebook.github.io/react-native/img/tiny_logo.png'}} />
+          <View style={styles.item}>
+            <CustomText>{moment(item.applicable_date).format('dddd')}</CustomText>
+            <CustomText> {`${parseInt(item.the_temp)}ºC`} </CustomText>
+            <Image source={{uri:`${Config.BASE_URL}/static/img/weather/png/64/${item.weather_state_abbr}.png`}} style={{height:50,width:50}}/>
           </View>}
           />
         </View>
@@ -55,14 +64,14 @@ export default Home = props => {
         </View>
         <View style={styles.tools}>
         <CustomButton
-            onPress={props.onReport}
+            onPress={()=>props.onTools('Noise')}
             activeOpacity={0.7}
             title="Noise Detector"
             textStyle={styles.buttonText}
             style={ styles.button}
           />
           <CustomButton
-            onPress={props.onReport}
+            onPress={props.onTools}
             activeOpacity={0.7}
             title="Emergency Light"
             textStyle={styles.buttonText}

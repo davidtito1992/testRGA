@@ -26,13 +26,21 @@ export default StyleSheet.create({
     paddingVertical:50,
   },
   item: {
-    marginHorizontal:20,
-    marginTop:10
+    width:'86%',
+    flexDirection:'row',
+    justifyContent:'space-between',
+    marginVertical:10,
+    paddingHorizontal:15
   },
   tools:{
-    paddingVertical:30,
+    paddingVertical:10,
     alignItems:'center',
     marginTop:5
+  },
+  separator:{
+    height: 1,
+    width: "100%",
+    backgroundColor: "#607D8B",
   },
   separatorContainer:{
     flexDirection:'row',
