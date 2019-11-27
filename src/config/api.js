@@ -2,15 +2,17 @@ import Reactotron from 'reactotron-react-native';
 import { create } from 'apisauce';
 import Config from 'react-native-config';
 
+const baseURL = Config.BASE_URL;
+console.log('baseURL',baseURL);
 const api = create({
-  baseURL:Config.BASE_URL,
+  baseURL,
   timeout: 5000
 });
 
 api.addMonitor(Reactotron.apisauce);
 
 export const apiSetup = dispatch => { // eslint-disable-line no-unused-vars, prettier/prettier
-  if (baseURL === 'http://business.com') {
+  if (baseURL === '') {
     console.warn('API baseURL has not been properly initialized');
   }
 
