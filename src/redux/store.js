@@ -9,6 +9,7 @@ import { fetchMiddleware, configureMergeState } from 'redux-recompose';
 
 import Navigator from '@screens';
 import auth from './auth/reducer';
+import weather from './weather/reducer';
 
 const nav = createNavigationReducer(Navigator);
 
@@ -16,9 +17,9 @@ configureMergeState((state, diff) => state.merge(diff));
 
 const reducers = combineReducers({
   auth,
-  nav
+  nav,
+  weather
 });
-
 
 const middlewares = [];
 const enhancers = [];
