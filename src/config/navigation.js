@@ -1,10 +1,7 @@
 import React from 'react';
-import i18next from 'i18next';
 import Routes from '@constants/routes';
-import {blue, white, transparent} from '@constants/colors';
 import statusBarConfig from '@constants/statusBar';
 import {isIos, isAndroid} from '@constants/platform';
-import BackButtonImage from '@components/BackButtonImage';
 import CustomText from '@components/CustomText';
 
 // Default nav options for all screens
