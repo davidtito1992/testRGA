@@ -1,5 +1,5 @@
 
-PeripheralHandler
+DeviceManager
 ====================================
 
 # Prerequisites
